@@ -26,6 +26,9 @@ var DownloadFilePathNotProvidedError = errors.New("no file path is provided for 
 // WaitForDownloadTimeOutError represents the error when time out duration is reached while waiting for a file download to be complete
 var WaitForDownloadTimeOutError = errors.New("file didn't appear in specified duration")
 
+// IDMPathError represents the error when the given IDM path doesn't exist
+var IDMPathError = errors.New("failed to verify the given idm path")
+
 // ApplicationsListError represents the error when program can't list the installed programs
 // NOTE: only windows
 type ApplicationsListError struct {

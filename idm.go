@@ -2,6 +2,7 @@ package idm
 
 import (
 	wapi "github.com/iamacarpet/go-win64api"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -15,6 +16,16 @@ func GetIDMPath() string {
 		_, _ = VerifyIDM()
 	}
 	return idmPath
+}
+
+func SetIDMPath(path string) error {
+	if _, err := os.Stat(path); err != nil {
+		return IDMPathError
+	}
+	idmPath = path
+	idmInstalled = true
+	idmInstallationChecked = true
+	return nil
 }
 
 // VerifyIDM verifies the IDM installation on the machine
@@ -83,6 +94,8 @@ func NewDownload(url string) (*Download, error) {
 	return &download, nil
 }
 
+// AddToQueue adds specified file to download queue, but don't start downloading
+// Calling Start() after calling this method won't download the queued download (starts a new download in IDM).
 func (d *Download) AddToQueue() error {
 	return AddToQueue(d.URL)
 }
@@ -130,10 +143,10 @@ func (d *Download) Start() error {
 	return startDownload(d.buildArgs())
 }
 
-// WaitForFinish waits for download to be completed
+// VerifyDownload waits for download to be completed
 // Only works if you specified the download path
 // NOTE: File path must've been provided and file name must either be provided or be present in url header
-func (d *Download) WaitForFinish(timeout time.Duration) error {
+func (d *Download) VerifyDownload(timeout time.Duration) error {
 	if d.Path == "" {
 		return DownloadFilePathNotProvidedError
 	}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"idm"
+	"github.com/Navid2zp/idm"
 	"time"
 )
 
@@ -19,14 +19,14 @@ func main() {
 	}
 
 	download, _ := idm.NewDownload("https://codeload.github.com/Navid2zp/idm/zip/master")
-	download.Silent()
+	download.Silent().QuitAfterFinish()
 	// set download path
 	download.SetFilePath("C:")
 	// Start the download
 	_ = download.Start()
 
 	// Wait till file is appeared in the given path
-	err = download.WaitForFinish(time.Second * 10)
+	err = download.VerifyDownload(time.Second * 10)
 	if err != nil {
 		fmt.Println("couldn't verify file download:", err.Error())
 	}
